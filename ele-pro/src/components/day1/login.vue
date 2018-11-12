@@ -9,10 +9,10 @@
         <!-- iview -->
     <div class="input">
         <div>
-            账号 ：<input type="text" @change="name" ref="input1">
+            账号 ：<input type="text" @change="name" ref="input1" placeholder="请输入5-10位字符，字母开头">
         </div>
         <div>
-            密码 ：<input :type="states?'text':'password'" class="mima" @change="pass" ref="input2">
+            密码 ：<input :type="states?'text':'password'" class="mima" @change="pass" ref="input2" placeholder="请输入6-26位字符,字母开头">
                 <i-switch size="large">
         <span slot="open" @click="ons">ON</span>
         <span slot="close" @click="ons">OFF</span>
@@ -36,7 +36,15 @@
     <div class="text">
         注册过的账号可账号密码登录
     </div>
-    <button class="btn">登录</button>
+
+    <!-- <form action="http://localhost:8090" method="POST">
+        <input type="text" name="user">
+        <input type="password" name="pass">
+        <input type="submit" value="提交">
+
+    </form> -->
+
+    <button class="btn" @click="login">登录</button>
     <router-link to='/reset'>
     <div class="reset">重置密码</div>
     </router-link>
@@ -49,7 +57,11 @@ export default {
         return{
             yanzheng:[],
             imgStr:'',
-            states:false
+            states:false,
+            username:'',
+            password:'',
+            nameStatus:false,
+            passStatus:false
         }
     },
     created(){
@@ -65,14 +77,43 @@ export default {
     methods:{
         name(){
             console.log(this.$refs.input1.value)
+            this.username=this.$refs.input1.value
+            if((/^[a-zA-Z]\d{4,9}/ig).test(this.username)){
+                this.nameStatus=true
+                console.log('✔')
+            }else{
+                alert('请按格式输入')
+            }
         },
         pass(){
             console.log(this.$refs.input2.value)
+            this.password = this.$refs.input2.value
+             if((/^[a-zA-Z]\w{5,25}/ig).test(this.password)){
+                 this.passStatus=true
+                 console.log('✔')
+            }else{
+                alert('请按格式输入')
+            }
         },
         ons(){
             this.states = !this.states
             console.log(this.states)
             console.log(11111)
+        },
+        login(){
+            console.log(123)
+            if(this.nameStatus==1&&this.passStatus==1){
+            this.$ajax.ajax({
+            type:'POST',
+            url:'/Api',
+            data:{
+                user:this.$refs.input1.value,
+                pass:this.$refs.input2.value
+            }
+        })
+        }else{
+            alert('请检查输入情况')
+        }
         }
     }
 };
