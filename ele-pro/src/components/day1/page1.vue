@@ -7,12 +7,12 @@
             </router-link>
         </div>
         <div class="location">
-            <span class="c1">当前定位城市：</span>
+            <span class="c1">当前定位城市：{{address}}</span>
             <span class="l1">定位不准时请在城市列表中选择</span>
         </div>
         <div class="l_c"> 
             <span class="a1">郑州</span>
-            <span class="a2">></span>
+            <span class="a2" @click="location">></span>
         </div>
         <div class="hot_city">
             <div class="b1">
@@ -39,7 +39,9 @@
                         <span class="A1"> {{index}} (按字母排序)</span>
                     </div>
                     <span v-for="(city,index) in item" :key="index"> 
-                        <span class="h-list2 h-list3">{{city.name}}</span>
+                      <router-link :to="{'path':'/select','query':{ 'id':'cityID','cityname':'cityName' }}">
+            <span class="h-list2 h-list3" @click="select($event)" :value='city.id' :cityName='city.name' ref="city">{{city.name}}</span>
+                      </router-link>                        
                     </span>
                    
                 </span>
@@ -81,10 +83,17 @@ export default {
         "Y",
         "Z"
       ],
-      index:'#E'
+      index:'#E',
+      address:'',
+      latitude: "",
+      longitude: "",
+      cityID:'',
+      cityName:''
     };
   },
   created() {
+    // var _this = this;
+
     this.$ajax
       .ajax({
         url: "https://elm.cangdu.org/v1/cities?type=hot"
@@ -101,6 +110,16 @@ export default {
         console.log(data);
         this.all_city = data;
       });
+
+
+          // 百度地图API功能
+	var geolocation = new BMap.Geolocation();
+	geolocation.getCurrentPosition(function(r){			
+      // alert('您的位置：'+r.point.lng+','+r.point.lat);   
+      this.latitude=r.point.lng
+      this.longitude=r.point.lat  
+      console.log(this.latitude,this.longitude)
+	})
   },
   methods: {
     fn(num) {
@@ -110,6 +129,25 @@ export default {
     fn2(index){
         console.log(index)
         this.index='#'+this.index
+    },
+    location(){
+      //地图
+      this.$ajax
+      .ajax({
+       url:'https://elm.cangdu.org/v2/pois/34.75661006,113.64964385'
+      })
+      .then(data => {
+        console.log(data);
+        this.address = data.city;
+      });
+    },
+    select(e){
+      this.cityID=e.target.getAttribute('value')
+      this.cityName=e.target.getAttribute('cityName')
+      console.log(e.target.getAttribute('value'))
+      console.log(this.cityID)
+      console.log(this.cityName)
+      this.$store.dispatch('UpcityId',this.cityID)
     }
   },
   computed: {}

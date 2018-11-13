@@ -53,113 +53,116 @@
 
 <script>
 export default {
-    data(){
-        return{
-            yanzheng:[],
-            imgStr:'',
-            states:false,
-            username:'',
-            password:'',
-            nameStatus:false,
-            passStatus:false
-        }
+  data() {
+    return {
+      yanzheng: [],
+      imgStr: "",
+      states: false,
+      username: "",
+      password: "",
+      nameStatus: false,
+      passStatus: false,
+    };
+  },
+  created() {
+    this.$ajax
+      .ajax({
+        type: "POST",
+        url: "https://elm.cangdu.org/v1/captchas"
+      })
+      .then(data => {
+        console.log(data);
+        console.log(data.code);
+        this.imgStr = data.code;
+      });
+  },
+  methods: {
+    name() {
+      console.log(this.$refs.input1.value);
+      this.username = this.$refs.input1.value;
+      if (/^[a-zA-Z]\d{4,9}/gi.test(this.username)) {
+        this.nameStatus = true;
+        console.log("✔");
+      } else {
+        alert("请按格式输入");
+      }
     },
-    created(){
+    pass() {
+      console.log(this.$refs.input2.value);
+      this.password = this.$refs.input2.value;
+      if (/^[a-zA-Z]\w{5,25}/gi.test(this.password)) {
+        this.passStatus = true;
+        console.log("✔");
+      } else {
+        alert("请按格式输入");
+      }
+    },
+    ons() {
+      this.states = !this.states;
+      console.log(this.states);
+      console.log(11111);
+    },
+    login() {
+      console.log(123);
+      if (this.nameStatus == 1 && this.passStatus == 1) {
         this.$ajax.ajax({
-            type:'POST',
-            url:'https://elm.cangdu.org/v1/captchas'
-        }).then((data)=>{
-            console.log(data)
-            console.log(data.code)
-            this.imgStr=data.code
-        })
-    },
-    methods:{
-        name(){
-            console.log(this.$refs.input1.value)
-            this.username=this.$refs.input1.value
-            if((/^[a-zA-Z]\d{4,9}/ig).test(this.username)){
-                this.nameStatus=true
-                console.log('✔')
-            }else{
-                alert('请按格式输入')
-            }
-        },
-        pass(){
-            console.log(this.$refs.input2.value)
-            this.password = this.$refs.input2.value
-             if((/^[a-zA-Z]\w{5,25}/ig).test(this.password)){
-                 this.passStatus=true
-                 console.log('✔')
-            }else{
-                alert('请按格式输入')
-            }
-        },
-        ons(){
-            this.states = !this.states
-            console.log(this.states)
-            console.log(11111)
-        },
-        login(){
-            console.log(123)
-            if(this.nameStatus==1&&this.passStatus==1){
-            this.$ajax.ajax({
-            type:'POST',
-            url:'/Api',
-            data:{
-                user:this.$refs.input1.value,
-                pass:this.$refs.input2.value
-            }
-        })
-        }else{
-            alert('请检查输入情况')
-        }
-        }
+          type: "POST",
+          url: "/Api",
+          data: {
+            type: "login",
+            user: this.$refs.input1.value,
+            pass: this.$refs.input2.value
+          }
+        });
+      } else {
+        alert("请检查输入情况");
+      }
     }
+  }
 };
 </script>
 
 <style scoped>
-.reset{
-    font-size: 15px;
-    color: #3091e8;
-    text-align: right;
-    padding: 10px;
+.reset {
+  font-size: 15px;
+  color: #3091e8;
+  text-align: right;
+  padding: 10px;
 }
-.btn{
-    background-color: #4bd964;
-    width: 95%;
-    height: 60px;
-    line-height: 60px;
-    border-style:none;
-    border-radius: 3px; 
-    font-size: 25px;
-    color: white;
+.btn {
+  background-color: #4bd964;
+  width: 95%;
+  height: 60px;
+  line-height: 60px;
+  border-style: none;
+  border-radius: 3px;
+  font-size: 25px;
+  color: white;
 }
-.number{
-    display: inline-block;
-    width: 115px;
+.number {
+  display: inline-block;
+  width: 115px;
 }
-.text{
-    color: red;
-    padding: 8px 12px;
-    text-align: left;
+.text {
+  color: red;
+  padding: 8px 12px;
+  text-align: left;
 }
-.mima{
-    width: 66%;
+.mima {
+  width: 66%;
 }
-.yanzheng{
-    width: 40%;
+.yanzheng {
+  width: 40%;
 }
-.input{
-    /* display: inline-block; */
-    margin: 15px 0;
-    outline: none;
+.input {
+  /* display: inline-block; */
+  margin: 15px 0;
+  outline: none;
 }
-input{
-    height: 50px;
-    width: 80%;
-    border-style: none;
+input {
+  height: 50px;
+  width: 80%;
+  border-style: none;
 }
 .header {
   text-align: center;

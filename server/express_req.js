@@ -25,9 +25,10 @@ server.use(bodyParse.urlencoded(
 ));
 
 
-server.get('/login',(req,res)=>{
-    console.log(req.query);
-    res.send('我收到了你的账号密码')
+// server.post('/reset',(req,res)=>{
+//     console.log(req.body);
+//     res.send('我收到了你的账号密码')
+//     console.log(12313)
     // db.query(`SELECT INTO user (ID,name,pass) VALUES(0,'${req.body.user}','${req.body.pass}')`,(err,data)=>{
     //     if(err){
     //         console.log('error'+err)
@@ -35,18 +36,32 @@ server.get('/login',(req,res)=>{
     //         console.log(data);
     //     }
     // });
-})
+// })
 
 server.post('/login',(req,res)=>{
     console.log(req.body);
     console.log(req.body.user,req.body.pass)
     // 操作数据库
     //执行sql语句
+    if(req.body.type=='login'){
     db.query(`INSERT INTO user (ID,name,pass) VALUES(0,'${req.body.user}','${req.body.pass}')`,(err,data)=>{
         if(err){
             console.log('error'+err)
         }else{
-            console.log(data);
+
+            console.log("创建用户成功");
         }
     });
+}else if(req.body.type=='reset'){
+    console.log('235653')
+    db.query(`UPDATE user SET pass = '${req.body.pass}' WHERE name = '${req.body.user}'`,(err,data)=>{
+        if(err){
+            console.log('error'+err)
+        }else{
+            
+            console.log('修改成功');
+        }
+    });
+}
 })
+

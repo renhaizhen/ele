@@ -12,10 +12,10 @@
             账号 ：<input type="text" @change="name" ref="input1" placeholder="请输入您的账号">
         </div>
         <div>
-            旧密码 ：<input type="password" @change="name" ref="input2" placeholder="请输入您的旧密码">
+            旧密码 ：<input type="password" @change="pass" ref="input2" placeholder="请输入您的旧密码">
         </div>
         <div>
-            新密码 ：<input type="password" @change="name" ref="input3" placeholder="请输入您的新密码">
+            新密码 ：<input type="password" @blur.prevent="newpass" ref="input3" placeholder="请输入您的新密码">
         </div>
         <div>
             确认密码 ：<input :type="states?'text':'password'" class="mima" @change="pass" ref="input4" placeholder="请确认您的新密码">
@@ -38,7 +38,7 @@
     </div>
 
 
-    <button class="btn" >确认修改</button>
+    <button class="btn" @click="btn">确认修改</button>
     </div>
 </template>
 
@@ -71,19 +71,30 @@ export default {
             this.username=this.$refs.input1.value
         },
         pass(){
+
+        },
+        btn(){
             console.log(this.$refs.input2.value)
             this.password = this.$refs.input2.value
 
             this.$ajax.ajax({
-            type:'GET',
+            type:'POST',
             url:'/Api',
             data:{
+                type:'reset',
                 user:this.$refs.input1.value,
-                pass:this.$refs.input2.value
-            }.then((data)=>{
+                pass:this.$refs.input3.value
+            }
+        }).then((data)=>{
                 console.log(data)
             })
-        })
+        },
+        newpass(){
+            if(this.$refs.input3.value===this.$refs.input4.value){
+                console.log('两次密码输入一致')
+            }else{
+                alert('两次密码输入不一致')
+            }
         },
         ons(){
             this.states = !this.states
