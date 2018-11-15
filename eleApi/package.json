@@ -1,0 +1,14 @@
+{
+  "name": "server",
+  "version": "1.1.1",
+  "description": "",
+  "main": "eleServer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "heson",
+  "license": "MIT",
+  "devDependencies": {
+    "express": "^4.16.4"
+  }
+}

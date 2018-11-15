@@ -17,6 +17,20 @@ module.exports = {
         pathRewrite:{
           '^/Api':'/login',
         }
+      },
+      "/Shops":{
+        target:'http://localhost:8890',
+        changeOrigin:true,
+        pathRewrite:{
+          '^/Shops':'/shopping',
+        }
+      },
+      "/Shop":{
+        target:'https://h5.ele.me/restapi',
+        changeOrigin:true,
+        pathRewrite:{
+          '^/Shop':'/',
+        }
       }
     },
 

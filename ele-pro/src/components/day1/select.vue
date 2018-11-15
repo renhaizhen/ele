@@ -12,7 +12,7 @@
       <div class="select">         
         <div v-if="searchAll.length" v-for="(item,index) in searchAll" :key="index" @click="thePlace(item.latitude,item.longitude)">
              <router-link :to="{'path':'/index'}">
-          <p @click="fn($event)" :value='item.address' :name='item.name'>{{item.name}}</p>      
+          <p @click="fn($event)" :value='item.address' :name='item.name' :latitude='item.latitude' :longitude='item.longitude'>{{item.name}}</p>      
             </router-link>     
           <p>{{item.address}}</p>
  
@@ -35,14 +35,15 @@ export default {
       searchAll:[],
       cityAdd:'',
       name:'',
-      searchHistory:[]
+      searchHistory:[],
+      latitude:'',
+      longitude:''
     };
   },
   // 获取传值
   created() {
     this.id = this.$route.query.cityID;
     this.searchHistory= window.localStorage['addname'].split(',');
-
     // this.city = this.$route.query.city;
   },
   methods: {
@@ -69,8 +70,12 @@ export default {
         console.log(123)
         this.cityAdd = e.target.getAttribute('value')
         this.name = e.target.getAttribute('name')
+        // this.latitude = e.target.getAttribute('latitude')
+        // this.longitude = e.target.getAttribute('longitude')
         console.log(this.cityAdd)
         this.$store.dispatch('UpdateCount',this.name)
+        // this.$store.dispatch('Uplatitude',this.latitude)
+        // this.$store.dispatch('Uplongitude',this.longitude)
         window.localStorage['addname']= window.localStorage['addname']+','+this.name
         console.log(this.searchHistory)
     }

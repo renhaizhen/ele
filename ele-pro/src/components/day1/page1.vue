@@ -20,7 +20,7 @@
             </div>
             <div class="h_list">
                 <span  v-for="(item,index) in hot_city" :key="index">
-                    <span class="h-list2">{{item.name}}</span>
+                    <span class="h-list2">{{item.name}}</span> 
                 </span>
             </div>
         </div>
@@ -40,7 +40,7 @@
                     </div>
                     <span v-for="(city,index) in item" :key="index"> 
                       <router-link :to="{'path':'/select','query':{ 'id':'cityID','cityname':'cityName' }}">
-            <span class="h-list2 h-list3" @click="select($event)" :value='city.id' :cityName='city.name' ref="city">{{city.name}}</span>
+            <span class="h-list2 h-list3" @click="select($event)" :value='city.id' :cityName='city.name' :latitude='city.latitude' :longitude='city.longitude'>{{city.name}}</span>
                       </router-link>                        
                     </span>
                    
@@ -85,14 +85,22 @@ export default {
       ],
       index:'#E',
       address:'',
-      latitude: "",
-      longitude: "",
+      latitude: "34.75661006",
+      longitude: "113.64964385",
       cityID:'',
-      cityName:''
+      cityName:'',
+      limit:10,
     };
   },
   created() {
     // var _this = this;
+    // this.$ajax.ajax({
+    //       type: "GET",
+    //       url: "Shop/shopping/v3/restaurants?latitude="+this.latitude+'&longitude='+this.longitude+'&limit='+this.limit
+    //     })
+    //     .then(data => {
+    //       console.log(data);
+    //     });
 
     this.$ajax
       .ajax({
@@ -110,15 +118,13 @@ export default {
         console.log(data);
         this.all_city = data;
       });
-
-
           // 百度地图API功能
 	var geolocation = new BMap.Geolocation();
 	geolocation.getCurrentPosition(function(r){			
       // alert('您的位置：'+r.point.lng+','+r.point.lat);   
-      this.latitude=r.point.lng
-      this.longitude=r.point.lat  
-      console.log(this.latitude,this.longitude)
+      // this.latitude=r.point.lng
+      // this.longitude=r.point.lat  
+      // console.log(this.latitude,this.longitude)
 	})
   },
   methods: {
@@ -144,10 +150,14 @@ export default {
     select(e){
       this.cityID=e.target.getAttribute('value')
       this.cityName=e.target.getAttribute('cityName')
+      this.latitude = e.target.getAttribute('latitude')
+      this.longitude = e.target.getAttribute('longitude')
       console.log(e.target.getAttribute('value'))
       console.log(this.cityID)
       console.log(this.cityName)
       this.$store.dispatch('UpcityId',this.cityID)
+      this.$store.dispatch('Uplatitude',this.latitude)
+      this.$store.dispatch('Uplongitude',this.longitude)
     }
   },
   computed: {}
